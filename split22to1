@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Source: Operating systems lecture by Prof. Werner at TU Chemnitz
+
+if [ -z "$1" ] || [ ! -f "$1" ] || \
+    [ "$(file -ib "$1" | cut -f1 -d' ')" != 'application/pdf;' ]
+then
+    echo 'No valid input file'
+    exit 1
+fi
+
+x=(0 -421 0 -421)
+y=(-297 -297 0 0)
+temp="$(mktemp -u /tmp/pdf-cv-XXXXX)"
+
+for i in {0..3}
+do
+    gs -q -dNOPAUSE -dBATCH -P- -dSAFER -sDEVICE=pdfwrite \
+        -g4210x2975 -sOutputFile="${temp}$i.pdf" \
+        -c "<</PageOffset [${x[$i]} ${y[$i]}]>> setpagedevice" \
+        -f "$1"
+done
+
+pdftk "${temp}"?.pdf shuffle output "${1/.pdf/-1x1.pdf}"
+rm "${temp}"?.pdf
+
