@@ -1,0 +1,12 @@
+#!/bin/bash
+set -u
+
+wwwuser='nginx'
+for f in "$@"; do
+    if [[ -f "$f" ]]; then
+        chmod 0640 "$f"
+    elif [[ -d "$f" ]]; then
+        chmod 0750 "$f"
+    fi
+    chown root:"$wwwuser" "$f"
+done

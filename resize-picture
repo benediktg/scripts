@@ -1,0 +1,8 @@
+#!/bin/bash
+set -u
+
+for i in "$@"; do
+    if [[ -f "$i" ]]; then
+        convert "$i" -adaptive-resize 2000x2000\> resized_"$i"
+    fi
+done
