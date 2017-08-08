@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u
+set -eu
 
 wwwuser='nginx'
 for f in "$@"; do
